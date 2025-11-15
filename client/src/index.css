@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "./styles/variables.css";
 
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Custom light variant: applies when element is descendant of .light */
 @custom-variant light (&:is(.light *));
 
@@ -134,4 +139,10 @@
   --blur-md: var(--blur-md);
   --blur-lg: var(--blur-lg);
   --blur-xl: var(--blur-xl);
+}
+
+@layer utilities {
+  .nav {
+    @apply fixed top-0 left-0 w-full h-auto bg-surface/80 backdrop-blur-md border-b border-border shadow-sm flex items-center px-6 z-(--z-sticky);
+  }
 }

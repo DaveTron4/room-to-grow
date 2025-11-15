@@ -1,29 +1,29 @@
 :root {
   /* Brand Colors - Room To Grow Theme (Growth & Learning) */
   --color-primary: #8b5cf6;     /* Purple - wisdom, creativity */
-  --color-secondary: #10b981;   /* Green - growth, progress */
-  --color-accent1: #a78bfa;     /* Light purple accent */
-  --color-accent2: #34d399;     /* Light green accent */
+  --color-secondary: #a78bfa;   /* Light purple - accent */
+  --color-accent1: #7c3aed;     /* Deeper purple accent */
+  --color-accent2: #c4b5fd;     /* Very light purple accent */
   --color-success: #22c55e;     /* Success green */
   --color-warning: #fbbf24;     /* Amber warning */
   --color-error: #f43f5e;       /* Rose red error */
   --color-info: #3b82f6;        /* Blue info */
   
   /* Base UI Colors - Dark theme (default) */
-  --color-bg: #0a0a0f;          /* Deep dark background */
-  --color-surface: #16161e;     /* Card/surface background */
-  --color-surface-hover: #1f1f2a;/* Surface hover state */
-  --color-border: #2a2a3a;      /* Border color */
-  --color-border-light: #3a3a4a;/* Lighter border */
+  --color-bg: #1a1a1f;          /* Dark background - matches image */
+  --color-surface: #25252b;     /* Card/surface background */
+  --color-surface-hover: #2d2d35;/* Surface hover state */
+  --color-border: #3a3a42;      /* Border color */
+  --color-border-light: #44444f;/* Lighter border */
   
-  --color-text: #f0f0f5;        /* Primary text */
-  --color-text-muted: #a0a0b0;  /* Muted text */
-  --color-text-subtle: #6b6b7b; /* Subtle text */
+  --color-text: #e5e5ea;        /* Primary text - light gray */
+  --color-text-muted: #9ca3af;  /* Muted text - gray */
+  --color-text-subtle: #6b7280; /* Subtle text - darker gray */
 
   /* AI/Message Colors */
   --color-user-msg: var(--color-primary);
-  --color-ai-msg: #1f1f2a;
-  --color-ai-msg-border: #2a2a3a;
+  --color-ai-msg: #2d2d35;
+  --color-ai-msg-border: #3a3a42;
 
   /* Button Colors - Primary (Purple) */
   --btn-primary: var(--color-primary);
@@ -32,12 +32,12 @@
   --btn-primary-text: #ffffff;
   --btn-primary-highlight: #a78bfa;
 
-  /* Button Colors - Secondary (Green) */
-  --btn-secondary: var(--color-secondary);
-  --btn-secondary-hover: #059669;
-  --btn-secondary-active: #047857;
-  --btn-secondary-text: #ffffff;
-  --btn-secondary-highlight: #34d399;
+  /* Button Colors - Secondary (Light/White) */
+  --btn-secondary: #ffffff;
+  --btn-secondary-hover: #f3f4f6;
+  --btn-secondary-active: #e5e7eb;
+  --btn-secondary-text: var(--color-primary);
+  --btn-secondary-highlight: #ffffff;
 
   /* Button Colors - Success */
   --btn-success: var(--color-success);
@@ -151,11 +151,11 @@
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-  --gradient-secondary: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  --gradient-growth: linear-gradient(135deg, #8b5cf6 0%, #10b981 100%);
-  --gradient-learning: linear-gradient(135deg, #a78bfa 0%, #34d399 100%);
-  --gradient-surface: linear-gradient(180deg, #16161e 0%, #1a1a24 100%);
-  --gradient-text: linear-gradient(90deg, #8b5cf6 0%, #10b981 100%);
+  --gradient-secondary: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  --gradient-growth: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  --gradient-learning: linear-gradient(135deg, #7c3aed 0%, #c4b5fd 100%);
+  --gradient-surface: linear-gradient(180deg, #25252b 0%, #1a1a1f 100%);
+  --gradient-text: linear-gradient(90deg, #a78bfa 0%, #c4b5fd 100%);
 
   /* Backdrop blur (for modern glass effects) */
   --blur-sm: 4px;
