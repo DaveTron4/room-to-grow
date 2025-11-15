@@ -53,6 +53,20 @@
   --btn-error-text: #ffffff;
   --btn-error-highlight: #fb7185;
 
+  /* Button Colors - Generative (Teal/Cyan for contrast) */
+  --btn-generative: #00c0a3;
+  --btn-generative-hover: #00896f;
+  --btn-generative-active: #0f766e;
+  --btn-generative-text: #ffffff;
+  --btn-generative-highlight: #2dd4bf;
+
+  /* Button Colors - New Chat (Amber/Gold for contrast) */
+  --btn-new-chat: #f59e0b;
+  --btn-new-chat-hover: #d97706;
+  --btn-new-chat-active: #b45309;
+  --btn-new-chat-text: #ffffff;
+  --btn-new-chat-highlight: #fbbf24;
+
   /* Button Colors - Ghost */
   --btn-ghost: transparent;
   --btn-ghost-hover: rgba(139, 92, 246, 0.1);

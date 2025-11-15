@@ -54,6 +54,16 @@ html {
   --color-btn-ghost-text: var(--btn-ghost-text);
   --color-btn-ghost-border: var(--btn-ghost-border);
 
+  /* Button Colors - Generative */
+  --color-btn-generative: var(--btn-generative);
+  --color-btn-generative-hover: var(--btn-generative-hover);
+  --color-btn-generative-text: var(--btn-generative-text);
+
+  /* Button Colors - New Chat */
+  --color-btn-new-chat: var(--btn-new-chat);
+  --color-btn-new-chat-hover: var(--btn-new-chat-hover);
+  --color-btn-new-chat-text: var(--btn-new-chat-text);
+
   /* Card Colors */
   --color-card-bg: var(--card-bg);
   --color-card-bg-hover: var(--card-bg-hover);
@@ -145,6 +155,22 @@ html {
   .nav {
     @apply fixed top-0 left-0 w-full h-auto bg-surface/80 backdrop-blur-md border-b border-border shadow-sm flex items-center px-6 z-(--z-sticky);
   }
+
+  .glass {
+    @apply backdrop-blur-md bg-btn-generative/10 border border-white/20 shadow-lg;
+  }
+
+  .glass-dark {
+    @apply backdrop-blur-md bg-btn-new-chat/20 border border-white/10 shadow-lg;
+  }
+
+  .glass-subtle {
+    @apply backdrop-blur-sm bg-white/5 border border-white/10 shadow-md;
+  }
+
+  .glass-strong {
+    @apply backdrop-blur-lg bg-white/15 border border-white/30 shadow-xl;
+  }
 }
 
 .chatbox-scroll::-webkit-scrollbar {
@@ -163,4 +189,15 @@ html {
 .chatbox-scroll {
   scrollbar-width: thin;
   scrollbar-color: #9ca3af transparent;
+}
+
+@keyframes wave-pulse {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }

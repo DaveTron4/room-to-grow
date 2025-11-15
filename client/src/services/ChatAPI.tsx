@@ -61,7 +61,53 @@ async function newChat(opts?: { signal?: AbortSignal }): Promise<{ message: stri
 	}
 }
 
-const ChatAPI = { sendChatMessage, newChat }
+async function generateFlashCards(
+	history: HistoryItem[],
+	opts?: { signal?: AbortSignal }
+): Promise<{ flashcards: Array<{ question: string; answer: string }> }> {
+	try {
+		const res = await fetch(`${API_BASE}/api/chat/flashcards`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ history }),
+			signal: opts?.signal,
+		})
 
-export { sendChatMessage, newChat, ChatAPI }
+		const data = await res.json().catch(() => ({}))
+		if (!res.ok) {
+			throw new Error((data as any)?.error || `Request failed: ${res.status}`)
+		}
+		return data
+	} catch (error) {
+		console.error('generateFlashCards error:', error)
+		throw error
+	}
+}
+
+async function generateQuiz(
+	history: HistoryItem[],
+	opts?: { signal?: AbortSignal }
+): Promise<{ quiz: Array<{ question: string; options: string[]; correctAnswer: number; explanation: string }> }> {
+	try {
+		const res = await fetch(`${API_BASE}/api/chat/quiz`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ history }),
+			signal: opts?.signal,
+		})
+
+		const data = await res.json().catch(() => ({}))
+		if (!res.ok) {
+			throw new Error((data as any)?.error || `Request failed: ${res.status}`)
+		}
+		return data
+	} catch (error) {
+		console.error('generateQuiz error:', error)
+		throw error
+	}
+}
+
+const ChatAPI = { sendChatMessage, newChat, generateFlashCards, generateQuiz }
+
+export { sendChatMessage, newChat, generateFlashCards, generateQuiz, ChatAPI }
 

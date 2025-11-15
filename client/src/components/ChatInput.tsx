@@ -1,4 +1,5 @@
 import React from 'react'
+import {Send} from 'lucide-react';
 
 type ChatInputProps = {
   input: string
@@ -29,7 +30,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
                 {error}
             </div>
         )}
-        <div className="flex items-end gap-2">
+        <div className="flex items-stretch gap-1">
             <textarea
                 className="flex-1 resize-none rounded-sm bg-input-bg border border-input-border focus:border-input-border-focus outline-none px-2 py-1 text-input-text placeholder:text-input-placeholder"
                 placeholder="Type your message..."
@@ -41,9 +42,17 @@ const ChatInput: React.FC<ChatInputProps> = ({
             <button
                 onClick={onSendMessage}
                 disabled={loading || input.trim().length === 0}
-                className="shrink-0 px-2 py-1 rounded-sm bg-primary hover:bg-btn-primary-hover text-btn-primary-text disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="shrink-0 px-1 rounded-sm bg-primary hover:bg-btn-primary-hover text-btn-primary-text disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
             >
-                {loading ? 'Sending…' : 'Send'}
+                {loading ? (
+                    <div className="flex gap-0.5">
+                        <div className="w-0.5 h-0.5 bg-btn-primary-text rounded-full" style={{ animation: 'wave-pulse 1.4s ease-in-out infinite' }}></div>
+                        <div className="w-0.5 h-0.5 bg-btn-primary-text rounded-full" style={{ animation: 'wave-pulse 1.4s ease-in-out 0.2s infinite' }}></div>
+                        <div className="w-0.5 h-0.5 bg-btn-primary-text rounded-full" style={{ animation: 'wave-pulse 1.4s ease-in-out 0.4s infinite' }}></div>
+                    </div>
+                ) : (
+                    <Send className="h-1 w-1" />
+                )}
             </button>
         </div>
         <div className="mt-1 text-xs text-text-subtle">Press Enter to send, Shift+Enter for a new line</div>

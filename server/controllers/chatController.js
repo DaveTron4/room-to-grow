@@ -33,7 +33,7 @@ const sendMessage = async (req, res) => {
             return res.status(500).json({ error: 'GEMINI_API_KEY is not configured' });
         }
 
-        // Initi
+        // Initialize chat with system instruction
         // Start a chat session with history if provided
         const chat = genAI.chats.create({
             model: 'gemini-2.0-flash',
@@ -103,4 +103,139 @@ const newChat = async (req, res) => {
     }
 };
 
-export { sendMessage, newChat }
+/**
+ * Generate flash cards from chat history
+ * POST /api/chat/flashcards
+ * Body: { history: array }
+ */
+const generateFlashCards = async (req, res) => {
+    try {
+        const { history = [] } = req.body;
+        console.log('[generateFlashCards] History length:', history.length);
+
+        if (!process.env.GEMINI_API_KEY) {
+            return res.status(500).json({ error: 'GEMINI_API_KEY is not configured' });
+        }
+
+        const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+        const flashCardPrompt = `Based on the following conversation, generate flash cards to help the student review key concepts.
+                                Conversation:
+                                ${history.map(msg => `${msg.role === 'user' ? 'Student' : 'Tutor'}: ${msg.content}`).join('\n')}
+
+                                Generate 5-10 flash cards in JSON format. Each flash card should have a "question" and "answer" field.
+                                Return ONLY a JSON object with this structure:
+                                {
+                                "flashcards": [
+                                    { "question": "...", "answer": "..." },
+                                    ...
+                                ]
+                                }`;
+
+        const chat = genAI.chats.create({
+            model: 'gemini-2.0-flash',
+            config: { 
+                temperature: 0.5,
+                responseType: 'json'
+            }
+        });
+
+        const result = await chat.sendMessage({ message: flashCardPrompt });
+        
+        let text = '';
+        if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+            text = result.candidates[0].content.parts[0].text;
+        } else {
+            throw new Error('Unexpected response structure from Gemini API');
+        }
+
+        // Strip markdown code blocks if present
+        const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+        // Parse the JSON response
+        const flashCards = JSON.parse(cleanText);
+        
+        res.status(200).json(flashCards);
+
+    } catch (error) {
+        console.error('[generateFlashCards] Error:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate flash cards',
+            details: error?.message || 'Unknown error'
+        });
+    }
+};
+
+/**
+ * Generate a quiz from chat history
+ * POST /api/chat/quiz
+ * Body: { history: array }
+ */
+const generateQuiz = async (req, res) => {
+    try {
+        const { history = [] } = req.body;
+        console.log('[generateQuiz] History length:', history.length);
+
+        if (!process.env.GEMINI_API_KEY) {
+            return res.status(500).json({ error: 'GEMINI_API_KEY is not configured' });
+        }
+
+        const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+        const quizPrompt = `Based on the following conversation, generate a quiz to test the student's understanding.
+                            Conversation:
+                            ${history.map(msg => `${msg.role === 'user' ? 'Student' : 'Tutor'}: ${msg.content}`).join('\n')}
+
+                            Generate 5 multiple-choice questions in JSON format. Each question should have:
+                            - "question": the question text
+                            - "options": array of 4 possible answers
+                            - "correctAnswer": the index (0-3) of the correct option
+                            - "explanation": brief explanation of why the answer is correct
+
+                            Return ONLY a JSON object with this structure:
+                            {
+                            "quiz": [
+                                {
+                                "question": "...",
+                                "options": ["A", "B", "C", "D"],
+                                "correctAnswer": 0,
+                                "explanation": "..."
+                                },
+                                ...
+                            ]
+                            }`;
+
+        const chat = genAI.chats.create({
+            model: 'gemini-2.0-flash',
+            config: { 
+                temperature: 0.5,
+                responseType: 'json'
+            }
+        });
+
+        const result = await chat.sendMessage({ message: quizPrompt });
+        
+        let text = '';
+        if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+            text = result.candidates[0].content.parts[0].text;
+        } else {
+            throw new Error('Unexpected response structure from Gemini API');
+        }
+
+        // Strip markdown code blocks if present
+        const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+        // Parse the JSON response
+        const quiz = JSON.parse(cleanText);
+        
+        res.status(200).json(quiz);
+    } catch (error) {
+        console.error('[generateQuiz] Error:', error);
+        res.status(500).json({ 
+            error: 'Failed to generate quiz',
+            details: error?.message || 'Unknown error'
+        });
+    }
+};
+
+export { sendMessage, newChat, generateFlashCards, generateQuiz }
