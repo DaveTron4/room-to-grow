@@ -1,0 +1,137 @@
+@import "tailwindcss";
+@import "./styles/variables.css";
+
+/* Custom light variant: applies when element is descendant of .light */
+@custom-variant light (&:is(.light *));
+
+@theme {
+  /* Brand Colors */
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent-1: var(--color-accent1);
+  --color-accent-2: var(--color-accent2);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
+  --color-info: var(--color-info);
+
+  /* Base UI Colors */
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-hover: var(--color-surface-hover);
+  --color-border: var(--color-border);
+  --color-border-light: var(--color-border-light);
+
+  /* Text Colors */
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-subtle: var(--color-text-subtle);
+
+  /* Message Colors */
+  --color-user-msg: var(--color-user-msg);
+  --color-ai-msg: var(--color-ai-msg);
+  --color-ai-msg-border: var(--color-ai-msg-border);
+
+  /* Button Colors - Primary */
+  --color-btn-primary: var(--btn-primary);
+  --color-btn-primary-hover: var(--btn-primary-hover);
+  --color-btn-primary-active: var(--btn-primary-active);
+  --color-btn-primary-text: var(--btn-primary-text);
+
+  /* Button Colors - Secondary */
+  --color-btn-secondary: var(--btn-secondary);
+  --color-btn-secondary-hover: var(--btn-secondary-hover);
+  --color-btn-secondary-active: var(--btn-secondary-active);
+
+  /* Button Colors - Ghost */
+  --color-btn-ghost: var(--btn-ghost);
+  --color-btn-ghost-hover: var(--btn-ghost-hover);
+  --color-btn-ghost-text: var(--btn-ghost-text);
+  --color-btn-ghost-border: var(--btn-ghost-border);
+
+  /* Card Colors */
+  --color-card-bg: var(--card-bg);
+  --color-card-bg-hover: var(--card-bg-hover);
+  --color-card-border: var(--card-border);
+  --color-card-border-hover: var(--card-border-hover);
+
+  /* Input Colors */
+  --color-input-bg: var(--input-bg);
+  --color-input-border: var(--input-border);
+  --color-input-border-focus: var(--input-border-focus);
+  --color-input-text: var(--input-text);
+  --color-input-placeholder: var(--input-placeholder);
+
+  /* Spacing Scale */
+  --spacing-xs: var(--spacing-xs);
+  --spacing-sm: var(--spacing-sm);
+  --spacing-base: var(--spacing);
+  --spacing-md: var(--spacing-md);
+  --spacing-lg: var(--spacing-lg);
+  --spacing-xl: var(--spacing-xl);
+  --spacing-2xl: var(--spacing-2xl);
+  --spacing-3xl: var(--spacing-3xl);
+
+  /* Border Radius */
+  --radius-sm: var(--radius-sm);
+  --radius-base: var(--radius);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-full: var(--radius-full);
+
+  /* Shadows */
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-base: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  
+  --font-size-xs: var(--text-xs);
+  --font-size-sm: var(--text-sm);
+  --font-size-base: var(--text-base);
+  --font-size-lg: var(--text-lg);
+  --font-size-xl: var(--text-xl);
+  --font-size-2xl: var(--text-2xl);
+  --font-size-3xl: var(--text-3xl);
+  --font-size-4xl: var(--text-4xl);
+  --font-size-5xl: var(--text-5xl);
+
+  /* Transitions */
+  --transition-fast: var(--transition-fast);
+  --transition-base: var(--transition);
+  --transition-slow: var(--transition-slow);
+  --transition-slower: var(--transition-slower);
+
+  /* Container */
+  --container-width: var(--container-width);
+  --container-padding: var(--container-padding);
+
+  /* Chat Specific */
+  --spacing-chat-message: var(--chat-message-gap);
+  --spacing-chat-padding: var(--chat-padding);
+  --height-header: var(--header-height);
+
+  /* Z-Index */
+  --z-base: var(--z-base);
+  --z-dropdown: var(--z-dropdown);
+  --z-sticky: var(--z-sticky);
+  --z-overlay: var(--z-overlay);
+  --z-modal: var(--z-modal);
+  --z-tooltip: var(--z-tooltip);
+  --z-toast: var(--z-toast);
+
+  /* Backdrop Blur */
+  --blur-sm: var(--blur-sm);
+  --blur-base: var(--blur);
+  --blur-md: var(--blur-md);
+  --blur-lg: var(--blur-lg);
+  --blur-xl: var(--blur-xl);
+}

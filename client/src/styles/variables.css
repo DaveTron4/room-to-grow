@@ -1,0 +1,266 @@
+:root {
+  /* Brand Colors - Room To Grow Theme (Growth & Learning) */
+  --color-primary: #8b5cf6;     /* Purple - wisdom, creativity */
+  --color-secondary: #10b981;   /* Green - growth, progress */
+  --color-accent1: #a78bfa;     /* Light purple accent */
+  --color-accent2: #34d399;     /* Light green accent */
+  --color-success: #22c55e;     /* Success green */
+  --color-warning: #fbbf24;     /* Amber warning */
+  --color-error: #f43f5e;       /* Rose red error */
+  --color-info: #3b82f6;        /* Blue info */
+  
+  /* Base UI Colors - Dark theme (default) */
+  --color-bg: #0a0a0f;          /* Deep dark background */
+  --color-surface: #16161e;     /* Card/surface background */
+  --color-surface-hover: #1f1f2a;/* Surface hover state */
+  --color-border: #2a2a3a;      /* Border color */
+  --color-border-light: #3a3a4a;/* Lighter border */
+  
+  --color-text: #f0f0f5;        /* Primary text */
+  --color-text-muted: #a0a0b0;  /* Muted text */
+  --color-text-subtle: #6b6b7b; /* Subtle text */
+
+  /* AI/Message Colors */
+  --color-user-msg: var(--color-primary);
+  --color-ai-msg: #1f1f2a;
+  --color-ai-msg-border: #2a2a3a;
+
+  /* Button Colors - Primary (Purple) */
+  --btn-primary: var(--color-primary);
+  --btn-primary-hover: #7c3aed;
+  --btn-primary-active: #6d28d9;
+  --btn-primary-text: #ffffff;
+  --btn-primary-highlight: #a78bfa;
+
+  /* Button Colors - Secondary (Green) */
+  --btn-secondary: var(--color-secondary);
+  --btn-secondary-hover: #059669;
+  --btn-secondary-active: #047857;
+  --btn-secondary-text: #ffffff;
+  --btn-secondary-highlight: #34d399;
+
+  /* Button Colors - Success */
+  --btn-success: var(--color-success);
+  --btn-success-hover: #16a34a;
+  --btn-success-active: #15803d;
+  --btn-success-text: #ffffff;
+  --btn-success-highlight: #4ade80;
+
+  /* Button Colors - Error/Danger */
+  --btn-error: var(--color-error);
+  --btn-error-hover: #e11d48;
+  --btn-error-active: #be123c;
+  --btn-error-text: #ffffff;
+  --btn-error-highlight: #fb7185;
+
+  /* Button Colors - Ghost */
+  --btn-ghost: transparent;
+  --btn-ghost-hover: rgba(139, 92, 246, 0.1);
+  --btn-ghost-active: rgba(139, 92, 246, 0.2);
+  --btn-ghost-text: var(--color-primary);
+  --btn-ghost-border: var(--color-primary);
+
+  /* Card Colors */
+  --card-bg: var(--color-surface);
+  --card-bg-hover: var(--color-surface-hover);
+  --card-border: var(--color-border);
+  --card-border-hover: var(--color-border-light);
+  --card-shadow: var(--shadow);
+  --card-shadow-hover: var(--shadow-lg);
+
+  /* Card Highlights */
+  --card-highlight-primary: rgba(139, 92, 246, 0.08);
+  --card-highlight-secondary: rgba(16, 185, 129, 0.08);
+  --card-highlight-success: rgba(34, 197, 94, 0.08);
+  --card-highlight-error: rgba(244, 63, 94, 0.08);
+  --card-highlight-info: rgba(59, 130, 246, 0.08);
+
+  /* Input/Form Colors */
+  --input-bg: var(--color-surface);
+  --input-border: var(--color-border);
+  --input-border-focus: var(--color-primary);
+  --input-text: var(--color-text);
+  --input-placeholder: var(--color-text-subtle);
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+  --text-5xl: 3rem;        /* 48px */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Layout */
+  --radius-sm: 0.375rem;   /* 6px */
+  --radius: 0.5rem;        /* 8px */
+  --radius-md: 0.625rem;   /* 10px */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-2xl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;   /* Fully rounded */
+  
+  --container-width: 1280px;
+  --container-padding: 2rem;  /* 32px */
+  
+  --spacing-xs: 0.5rem;    /* 8px */
+  --spacing-sm: 0.75rem;   /* 12px */
+  --spacing: 1rem;         /* 16px */
+  --spacing-md: 1.25rem;   /* 20px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-2xl: 3rem;     /* 48px */
+  --spacing-3xl: 4rem;     /* 64px */
+
+  /* Chat-specific spacing */
+  --chat-message-gap: 1rem;
+  --chat-padding: 1.5rem;
+  --header-height: 4rem;   /* 64px */
+
+  /* Elevation / Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.35);
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 30px rgba(0, 0, 0, 0.55);
+  --shadow-2xl: 0 30px 50px rgba(0, 0, 0, 0.6);
+  
+  /* Glow effects for interactive elements */
+  --glow-primary: 0 0 20px rgba(139, 92, 246, 0.3);
+  --glow-primary-intense: 0 0 30px rgba(139, 92, 246, 0.5);
+  --glow-secondary: 0 0 20px rgba(16, 185, 129, 0.3);
+  --glow-success: 0 0 20px rgba(34, 197, 94, 0.3);
+  --glow-error: 0 0 20px rgba(244, 63, 94, 0.3);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  --gradient-secondary: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-growth: linear-gradient(135deg, #8b5cf6 0%, #10b981 100%);
+  --gradient-learning: linear-gradient(135deg, #a78bfa 0%, #34d399 100%);
+  --gradient-surface: linear-gradient(180deg, #16161e 0%, #1a1a24 100%);
+  --gradient-text: linear-gradient(90deg, #8b5cf6 0%, #10b981 100%);
+
+  /* Backdrop blur (for modern glass effects) */
+  --blur-sm: 4px;
+  --blur: 8px;
+  --blur-md: 12px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+
+  /* Z-index layers */
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-overlay: 1200;
+  --z-modal: 1300;
+  --z-tooltip: 1400;
+  --z-toast: 1500;
+}
+
+/* Light Mode */
+.light {
+  /* Brand Colors remain the same */
+  --color-primary: #7c3aed;
+  --color-secondary: #059669;
+  --color-accent1: #8b5cf6;
+  --color-accent2: #10b981;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-error: #e11d48;
+  --color-info: #2563eb;
+  
+  /* Base UI Colors - Light theme */
+  --color-bg: #fafafa;          /* Off-white background */
+  --color-surface: #ffffff;     /* Pure white surfaces */
+  --color-surface-hover: #f5f5f7;/* Light hover state */
+  --color-border: #e5e5ea;      /* Light border */
+  --color-border-light: #d1d1d6;/* Darker border for contrast */
+  
+  --color-text: #1a1a1f;        /* Almost black text */
+  --color-text-muted: #5a5a65;  /* Muted text */
+  --color-text-subtle: #8a8a95; /* Subtle text */
+
+  /* AI/Message Colors */
+  --color-user-msg: var(--color-primary);
+  --color-ai-msg: #f5f5f7;
+  --color-ai-msg-border: #e5e5ea;
+
+  /* Card Colors */
+  --card-bg: #ffffff;
+  --card-bg-hover: #f5f5f7;
+  --card-border: #e5e5ea;
+  --card-border-hover: #d1d1d6;
+
+  /* Input/Form Colors */
+  --input-bg: #ffffff;
+  --input-border: #d1d1d6;
+  --input-border-focus: var(--color-primary);
+  --input-text: var(--color-text);
+  --input-placeholder: var(--color-text-subtle);
+
+  /* Shadows - Light theme (softer) */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 20px 30px rgba(0, 0, 0, 0.15);
+  --shadow-2xl: 0 30px 50px rgba(0, 0, 0, 0.18);
+
+  /* Card Highlights */
+  --card-highlight-primary: rgba(124, 58, 237, 0.06);
+  --card-highlight-secondary: rgba(5, 150, 105, 0.06);
+  --card-highlight-success: rgba(22, 163, 74, 0.06);
+  --card-highlight-error: rgba(225, 29, 72, 0.06);
+  --card-highlight-info: rgba(37, 99, 235, 0.06);
+
+  /* Glow effects (subtle in light mode) */
+  --glow-primary: 0 0 15px rgba(124, 58, 237, 0.15);
+  --glow-primary-intense: 0 0 25px rgba(124, 58, 237, 0.25);
+  --glow-secondary: 0 0 15px rgba(5, 150, 105, 0.15);
+  --glow-success: 0 0 15px rgba(22, 163, 74, 0.15);
+  --glow-error: 0 0 15px rgba(225, 29, 72, 0.15);
+
+  /* Gradients (adjusted for light mode) */
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition: 0ms;
+    --transition-slow: 0ms;
+    --transition-slower: 0ms;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #4a4a5a;
+    --color-border-light: #5a5a6a;
+  }
+  
+  .light {
+    --color-border: #c1c1c6;
+    --color-border-light: #a1a1a6;
+  }
+}
