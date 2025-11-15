@@ -133,6 +133,12 @@ const Chat = () => {
         setActiveModal(null)
     }
 
+    const handleNewChat = useCallback(() => {
+        setMessages([])
+        setActivities([])
+        setError(null)
+    }, [])
+
     return (
         <div className="h-screen flex overflow-hidden">
             {/* Future: Sidebar for chat history will go here */}
@@ -159,7 +165,7 @@ const Chat = () => {
                                 Generate Quiz
                             </button>
                         </div>
-                        <button className="glass-dark hover:bg-btn-new-chat text-btn-new-chat-text px-2 py-1 rounded-sm text-sm transition-colors">
+                        <button className="glass-dark hover:bg-btn-new-chat text-btn-new-chat-text px-2 py-1 rounded-sm text-sm transition-colors" onClick={handleNewChat}>
                             New Chat
                         </button>
                     </div>
