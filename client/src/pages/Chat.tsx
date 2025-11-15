@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { ChatAPI } from '../services/ChatAPI'
 import ChatBox from '../components/ChatBox'
 import ChatInput from '../components/ChatInput'
@@ -53,11 +53,11 @@ const Chat = () => {
     return (
         <div className="min-h-screen flex">
             {/* Future: Sidebar for chat history will go here */}
-            {/* <div className="w-64 border-r border-border bg-surface">Sidebar</div> */}
+            {/* <div className="w-20 border-r border-border bg-surface">Sidebar</div> */}
             
             {/* Main chat area */}
-            <div className="flex-1 flex flex-col h-screen p-4">
-                <div className="max-w-4xl w-full mx-auto flex flex-col h-full gap-4">
+            <div className="flex-1 flex flex-col h-screen p-4 pt-10">
+                <div className="max-w-1/2 w-full mx-auto flex flex-col h-full gap-2">
                     <ChatBox messages={messages} />
                     <ChatInput 
                         input={input}

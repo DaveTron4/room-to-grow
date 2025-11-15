@@ -146,3 +146,21 @@ html {
     @apply fixed top-0 left-0 w-full h-auto bg-surface/80 backdrop-blur-md border-b border-border shadow-sm flex items-center px-6 z-(--z-sticky);
   }
 }
+
+.chatbox-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.chatbox-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chatbox-scroll::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 4px;
+}
+.chatbox-scroll::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+.chatbox-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af transparent;
+}

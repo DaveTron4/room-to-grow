@@ -26,7 +26,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
           setIsTyping(false)
           clearInterval(interval)
         }
-      }, 20) // Adjust speed here (lower = faster)
+      }, 10)
 
       return () => clearInterval(interval)
     } else {
@@ -49,8 +49,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
       <div
         className={
           role === 'user'
-            ? 'max-w-[85%] rounded-sm px-3 py-2 bg-user-msg text-text'
-            : 'max-w-[85%] rounded-sm px-3 py-2 bg-ai-msg border border-ai-msg-border text-text'
+            ? 'max-w-[85%] rounded-sm px-2 py-1 bg-user-msg text-text'
+            : 'max-w-[85%] rounded-sm px-2 py-1 bg-ai-msg border border-ai-msg-border text-text'
         }
       >
         <div className={`prose prose-sm max-w-none ${role === 'user' ? 'text-right' : 'text-left'}`}>
@@ -79,7 +79,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
             {displayedContent}
           </ReactMarkdown>
         </div>
-        {isTyping && <span className="inline-block w-1 h-2 ml-1 bg-accent-1 animate-pulse"></span>}
+        {/* {isTyping && <div className="inline-block w-0.5 h-2 ml-1 bg-accent-1 animate-pulse"></div>} */}
       </div>
     </motion.div>
   )
