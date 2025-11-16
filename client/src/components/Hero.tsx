@@ -1,6 +1,18 @@
 import { motion } from "motion/react"
+import { useNavigate } from "react-router-dom"
 
 const Hero = () => {
+  const navigate = useNavigate()
+
+  const handleStartLearning = () => {
+    navigate('/chat')
+  }
+
+  const handleLearnMore = () => {
+    const aboutSection = document.getElementById('about')
+    aboutSection?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <section className="hero min-h-screen flex flex-col justify-center items-center text-center gap-2 relative overflow-hidden">
         {/* Conic Gradient Background */}
@@ -51,6 +63,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
             <motion.button 
+              onClick={handleStartLearning}
               className="px-3 py-1 bg-primary hover:bg-btn-primary-hover text-white rounded-sm font-medium transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -58,6 +71,7 @@ const Hero = () => {
               Start Learning Now
             </motion.button>
             <motion.button 
+              onClick={handleLearnMore}
               className="px-3 py-1 bg-white hover:bg-white/0 hover:border-accent-1 border text-primary rounded-sm font-medium transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

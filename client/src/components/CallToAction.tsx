@@ -1,7 +1,13 @@
-
 import { motion } from 'motion/react'
+import { useNavigate } from 'react-router-dom'
 
 const CallToAction = () => {
+  const navigate = useNavigate()
+
+  const handleGetStarted = () => {
+    navigate('/chat')
+  }
+
   return (
     <section className='py-5 flex flex-col justify-center items-center text-center gap-2 relative overflow-hidden'>
       <div className='max-w-10/12'>
@@ -36,6 +42,7 @@ const CallToAction = () => {
           
           {/* Button */}
           <motion.button 
+            onClick={handleGetStarted}
             className='px-3 py-1 bg-primary hover:bg-btn-primary-hover text-btn-primary-text rounded-sm transition-colors font-medium text-lg'
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
