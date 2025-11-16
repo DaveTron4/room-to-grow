@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion } from 'motion/react'
 
 type FlashCard = {
     question: string
@@ -9,10 +9,11 @@ type FlashCard = {
 
 type FlashCardModalProps = {
     flashcards: FlashCard[]
+    title?: string
     onClose: () => void
 }
 
-const FlashCardModal: React.FC<FlashCardModalProps> = ({ flashcards, onClose }) => {
+const FlashCardModal: React.FC<FlashCardModalProps> = ({ flashcards, title, onClose }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isFlipped, setIsFlipped] = useState(false)
 
@@ -53,6 +54,7 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({ flashcards, onClose }) 
                 </button>
 
                 <h2 className="text-2xl font-bold text-text mb-1">Flash Cards</h2>
+                <h3 className="text-sm text-text-muted mb-2">{title || 'Study Session'}</h3>
 
                 <div className="mb-2 flex justify-between items-center text-sm text-text-muted">
                     Card {currentIndex + 1} of {flashcards.length}

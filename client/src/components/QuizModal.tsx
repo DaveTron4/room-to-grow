@@ -11,10 +11,11 @@ type QuizQuestion = {
 
 type QuizModalProps = {
     quiz: QuizQuestion[]
+    title?: string
     onClose: () => void
 }
 
-const QuizModal: React.FC<QuizModalProps> = ({ quiz, onClose }) => {
+const QuizModal: React.FC<QuizModalProps> = ({ quiz, title, onClose }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
     const [showExplanation, setShowExplanation] = useState(false)
@@ -72,6 +73,7 @@ const QuizModal: React.FC<QuizModalProps> = ({ quiz, onClose }) => {
                 </button>
 
                 <h2 className="text-2xl font-bold text-text mb-1">Quiz</h2>
+                <h3 className="text-sm text-text-muted mb-2">{title || 'Knowledge Check'}</h3>
 
                 {!isFinished ? (
                 <>

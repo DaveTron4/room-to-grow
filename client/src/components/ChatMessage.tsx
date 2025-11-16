@@ -36,7 +36,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
 
   return (
     <motion.div 
-      className={`flex ${role === 'user' ? 'justify-end text-right' : 'justify-start text-left'}`}
+      className={`flex mt-2 ${role === 'user' ? 'justify-end text-right' : 'justify-start text-left'}`}
       initial={{ opacity: 0, scale: 0.8, y: 10 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ 

@@ -44,7 +44,7 @@ const ActivityPanel: React.FC<ActivityPanelProps> = ({ activities, onActivityCli
                                     )}
                                     <div className="flex-1 min-w-0">
                                         <p className="text-sm font-medium text-text truncate">{activity.title}</p>
-                                        <p className="text-xs text-text-muted">
+                                        <p className="text-xs text-text-muted truncate">
                                         {activity.count} {activity.type === 'flashcard' ? 'cards' : 'questions'}
                                         </p>
                                     </div>
