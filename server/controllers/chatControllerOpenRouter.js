@@ -31,17 +31,15 @@ const GENERATION_MODEL = process.env.OPENROUTER_GENERATION_MODEL || "google/gemi
 const FALLBACK_MODELS = [
     "google/gemini-2.0-flash-exp:free",
     "meta-llama/llama-3.2-3b-instruct:free",
-    "nousresearch/hermes-3-llama-3.1-405b:free",
-    "google/gemini-flash-1.5:free"
+    "nousresearch/hermes-3-llama-3.1-405b:free"
 ];
 
 // Vision-capable models (support image inputs)
 const VISION_FALLBACK_MODELS = [
     "google/gemini-2.0-flash-exp:free",
-    "google/gemini-flash-1.5:free",
+    "meta-llama/llama-3.2-90b-vision-instruct:free",
     "openai/gpt-4-turbo",
-    "anthropic/claude-3.5-sonnet",
-    "meta-llama/llama-3.2-90b-vision-instruct:free"
+    "anthropic/claude-3.5-sonnet"
 ];
 
 /**
