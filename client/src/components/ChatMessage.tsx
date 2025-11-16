@@ -6,37 +6,19 @@ import { Volume2, VolumeX, Loader2 } from 'lucide-react'
 type ChatMessageProps = {
   role: 'user' | 'model'
   content: string
+  skipAnimation?: boolean  // Skip typewriter for loaded messages
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
-  const [displayedContent, setDisplayedContent] = useState('')
-  const [isTyping, setIsTyping] = useState(role === 'model')
+  const [displayedContent, setDisplayedContent] = useState(content)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
   const [isLoadingAudio, setIsLoadingAudio] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  // Typewriter effect for AI messages
+  // Update content when it changes (for streaming)
   useEffect(() => {
-    if (role === 'model') {
-      setDisplayedContent('')
-      setIsTyping(true)
-      let currentIndex = 0
-      
-      const interval = setInterval(() => {
-        if (currentIndex < content.length) {
-          setDisplayedContent(content.slice(0, currentIndex + 1))
-          currentIndex++
-        } else {
-          setIsTyping(false)
-          clearInterval(interval)
-        }
-      }, 10)
-
-      return () => clearInterval(interval)
-    } else {
-      setDisplayedContent(content)
-    }
-  }, [content, role])
+    setDisplayedContent(content)
+  }, [content])
 
   const handlePlayAudio = async () => {
     if (isPlayingAudio) {
@@ -134,7 +116,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
         </div>
         
         {/* Audio control button for AI messages */}
-        {role === 'model' && !isTyping && (
+        {role === 'model' && displayedContent.length > 0 && (
           <button
             onClick={handlePlayAudio}
             disabled={isLoadingAudio}

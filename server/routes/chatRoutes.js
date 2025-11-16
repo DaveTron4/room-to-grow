@@ -1,23 +1,39 @@
 import express from 'express';
+import multer from 'multer';
 import { 
-    sendMessage, 
-    newChat, 
+    sendMessage,
+    sendMessageStream,
     generateFlashCards, 
     generateQuiz,
     getChatHistory,
     getChatById,
     getActivities,
-    deleteChat,
-    deleteActivity
-} from '../controllers/chatController.js';
+    deleteChat
+} from '../controllers/chatControllerOpenRouter.js';
 
 const router = express.Router();
 
+// Configure multer for memory storage (stores file in buffer)
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        // Accept images only
+        if (!file.mimetype.startsWith('image/')) {
+            cb(new Error('Only image files are allowed!'), false);
+            return;
+        }
+        cb(null, true);
+    }
+});
+
+// POST /api/chat/stream - Send a message with streaming response (supports image upload)
+router.post('/stream', upload.single('image'), sendMessageStream);
+
 // POST /api/chat - Send a message to the AI tutor
 router.post('/', sendMessage);
-
-// POST /api/chat/new - Create a new chat session
-router.post('/new', newChat);
 
 // POST /api/chat/flashcards - Generate flash cards from chat history
 router.post('/flashcards', generateFlashCards);
@@ -33,9 +49,6 @@ router.get('/activities', getActivities);
 
 // GET /api/chat/:chatId - Get a specific chat by ID
 router.get('/:chatId', getChatById);
-
-// DELETE /api/chat/activities/:activityId - Delete an activity
-router.delete('/activities/:activityId', deleteActivity);
 
 // DELETE /api/chat/:chatId - Delete a chat
 router.delete('/:chatId', deleteChat);

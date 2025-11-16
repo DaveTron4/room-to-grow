@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Send, Mic, MicOff } from 'lucide-react'
+import { Send, Mic, MicOff, Image, X } from 'lucide-react'
 
 type ChatInputProps = {
   input: string
@@ -7,6 +7,9 @@ type ChatInputProps = {
   error: string | null
   onInputChange: (value: string) => void
   onSendMessage: () => void
+  onImageSelect?: (image: File) => void
+  selectedImage?: File | null
+  onImageRemove?: () => void
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ 
@@ -14,11 +17,26 @@ const ChatInput: React.FC<ChatInputProps> = ({
   loading, 
   error, 
   onInputChange, 
-  onSendMessage 
+  onSendMessage,
+  onImageSelect,
+  selectedImage,
+  onImageRemove
 }) => {
   const [isListening, setIsListening] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
   const recognitionRef = useRef<any>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file && file.type.startsWith('image/')) {
+      onImageSelect?.(file)
+    }
+  }
 
   useEffect(() => {
     // Check if speech recognition is supported
@@ -94,15 +112,51 @@ const ChatInput: React.FC<ChatInputProps> = ({
                 {error}
             </div>
         )}
+        
+        {/* Image preview */}
+        {selectedImage && (
+          <div className="relative inline-block">
+            <img 
+              src={URL.createObjectURL(selectedImage)} 
+              alt="Selected" 
+              className="w-5 rounded-sm border border-border"
+            />
+            <button
+              onClick={onImageRemove}
+              className="glass-close absolute top-0 right-0 p-0.5 text-white rounded-full"
+              title="Remove image"
+            >
+              <X className="w-1 h-1" />
+            </button>
+          </div>
+        )}
+        
         <div className="flex items-stretch gap-1">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            
             <textarea
                 className="flex-1 resize-none rounded-sm bg-input-bg border border-input-border focus:border-input-border-focus outline-none px-2 py-1 text-input-text placeholder:text-input-placeholder"
-                placeholder="Type your message..."
+                placeholder={selectedImage ? "Ask about this image..." : "Type your message..."}
                 value={input}
                 onChange={(e) => onInputChange(e.target.value)}
                 onKeyDown={onKeyDown}
                 rows={1}
             />
+            
+            <button
+              onClick={handleImageClick}
+              disabled={loading}
+              className="shrink-0 px-1 rounded-sm bg-surface-hover hover:bg-surface-hover/80 text-text transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Upload image"
+            >
+              <Image className="h-1 w-1" />
+            </button>
             
             {speechSupported && (
               <button
@@ -142,6 +196,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         <div className="mt-1 text-xs text-text-subtle">
           Press Enter to send, Shift+Enter for a new line
           {speechSupported && <span> • Click mic to use voice input</span>}
+          <span> • Click image icon to upload a photo</span>
         </div>
     </div>
   )

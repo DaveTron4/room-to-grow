@@ -40,19 +40,6 @@ const Auth = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Logo/Brand */}
-        <motion.div 
-          className="mb-3"
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-        >
-          <h1 className="text-5xl font-mono text-text mb-1">
-            Room To Grow
-          </h1>
-          <div className="h-0.5 w-20 bg-primary mx-auto rounded-full"></div>
-        </motion.div>
-
         {/* Attention Getter */}
         <motion.h2 
           className="text-3xl font-medium text-text mb-1"

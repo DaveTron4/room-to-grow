@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ChatAPI } from '../services/ChatAPI'
 import type { ChatHistoryItem } from '../services/ChatAPI'
-import { MessageSquare, Trash2, Loader2 } from 'lucide-react'
+import { Trash2, Loader2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 
 type HistoryPanelProps = {
@@ -59,18 +59,6 @@ const HistoryPanel = ({ onChatSelect, currentChatId, onHistoryUpdate, refreshKey
 		} finally {
 			setDeletingId(null)
 		}
-	}
-
-	const formatDate = (dateStr: string) => {
-		const date = new Date(dateStr)
-		const now = new Date()
-		const diff = now.getTime() - date.getTime()
-		const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-		if (days === 0) return 'Today'
-		if (days === 1) return 'Yesterday'
-		if (days < 7) return `${days}d ago`
-		return date.toLocaleDateString()
 	}
 
 	return (

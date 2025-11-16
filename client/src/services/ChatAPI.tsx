@@ -12,25 +12,113 @@ export type ChatResponse = {
 	chatId?: string
 }
 
+export type StreamCallback = (chunk: string) => void
+export type StreamCompleteCallback = (chatId?: string) => void
+
 // Base URL (relative so it works behind same-origin proxy; override via Vite env if needed)
 const API_BASE = (import.meta as any).env?.VITE_API_URL || ''
+
+async function sendChatMessageStream(
+	message: string,
+	history: HistoryItem[] = [],
+	chatId: string | undefined,
+	model: string | undefined,
+	image: File | undefined,
+	onChunk: StreamCallback,
+	onComplete: StreamCompleteCallback,
+	onError: (error: Error) => void
+): Promise<void> {
+	try {
+		let body: any
+		let headers: any = { 'Content-Type': 'application/json' }
+		
+		if (image) {
+			// Use FormData for image uploads
+			const formData = new FormData()
+			formData.append('message', message)
+			formData.append('history', JSON.stringify(history))
+			if (chatId) formData.append('chatId', chatId)
+			if (model) formData.append('model', model)
+			formData.append('image', image)
+			
+			body = formData
+			headers = {} // Let browser set Content-Type with boundary
+		} else {
+			body = JSON.stringify({ message, history, chatId, model })
+		}
+		
+		const res = await fetch(`${API_BASE}/api/chat/stream`, {
+			method: 'POST',
+			headers,
+			credentials: 'include',
+			body,
+		})
+
+		if (!res.ok) {
+			throw new Error(`Request failed: ${res.status}`)
+		}
+
+		const reader = res.body?.getReader()
+		const decoder = new TextDecoder()
+
+		if (!reader) {
+			throw new Error('No response body')
+		}
+
+		while (true) {
+			const { done, value } = await reader.read()
+			if (done) break
+
+			const chunk = decoder.decode(value)
+			const lines = chunk.split('\n')
+
+			for (const line of lines) {
+				if (line.startsWith('data: ')) {
+					try {
+						const data = JSON.parse(line.slice(6))
+						
+						if (data.error) {
+							onError(new Error(data.error))
+							return
+						}
+						
+						if (data.done) {
+							onComplete(data.chatId)
+							return
+						}
+						
+						if (data.content) {
+							onChunk(data.content)
+						}
+					} catch (e) {
+						console.error('Failed to parse SSE data:', e)
+					}
+				}
+			}
+		}
+	} catch (error) {
+		console.error('sendChatMessageStream error:', error)
+		onError(error instanceof Error ? error : new Error('Stream failed'))
+	}
+}
 
 async function sendChatMessage(
 	message: string,
 	history: HistoryItem[] = [],
 	chatId?: string,
+	model?: string,
 	opts?: { signal?: AbortSignal }
 ): Promise<ChatResponse> {
 	try {
 
-        console.log('Sending chat message:', { message, history, chatId })
+        console.log('Sending chat message:', { message, history, chatId, model })
         console.log('API_BASE:', API_BASE)
 
 		const res = await fetch(`${API_BASE}/api/chat`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include',
-			body: JSON.stringify({ message, history, chatId }),
+			body: JSON.stringify({ message, history, chatId, model }),
 			signal: opts?.signal,
 		})
 
@@ -68,6 +156,7 @@ async function newChat(opts?: { signal?: AbortSignal }): Promise<{ message: stri
 async function generateFlashCards(
 	history: HistoryItem[],
 	chatId?: string,
+	model?: string,
 	opts?: { signal?: AbortSignal }
 ): Promise<{ flashcards: Array<{ question: string; answer: string }>; title?: string; activityId?: string }> {
 	try {
@@ -75,7 +164,7 @@ async function generateFlashCards(
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include',
-			body: JSON.stringify({ history, chatId }),
+			body: JSON.stringify({ history, chatId, model }),
 			signal: opts?.signal,
 		})
 
@@ -93,6 +182,7 @@ async function generateFlashCards(
 async function generateQuiz(
 	history: HistoryItem[],
 	chatId?: string,
+	model?: string,
 	opts?: { signal?: AbortSignal }
 ): Promise<{ quiz: Array<{ question: string; options: string[]; correctAnswer: number; explanation: string }>; title?: string; activityId?: string }> {
 	try {
@@ -100,7 +190,7 @@ async function generateQuiz(
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include',
-			body: JSON.stringify({ history, chatId }),
+			body: JSON.stringify({ history, chatId, model }),
 			signal: opts?.signal,
 		})
 
@@ -221,7 +311,7 @@ async function getActivities(opts?: { signal?: AbortSignal }): Promise<{ activit
 	}
 }
 
-const ChatAPI = { sendChatMessage, newChat, generateFlashCards, generateQuiz, getChatHistory, getChatById, deleteChat, getActivities }
+const ChatAPI = { sendChatMessage, sendChatMessageStream, newChat, generateFlashCards, generateQuiz, getChatHistory, getChatById, deleteChat, getActivities }
 
-export { sendChatMessage, newChat, generateFlashCards, generateQuiz, getChatHistory, getChatById, deleteChat, getActivities, ChatAPI }
+export { sendChatMessage, sendChatMessageStream, newChat, generateFlashCards, generateQuiz, getChatHistory, getChatById, deleteChat, getActivities, ChatAPI }
 

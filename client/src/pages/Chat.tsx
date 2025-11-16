@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react'
-import { ChatAPI } from '../services/ChatAPI'
+import { ChatAPI, sendChatMessageStream } from '../services/ChatAPI'
 import ChatBox from '../components/ChatBox'
 import ChatInput from '../components/ChatInput'
 import ActivityPanel from '../components/ActivityPanel'
 import FlashCardModal from '../components/FlashCardModal'
 import QuizModal from '../components/QuizModal'
 import HistoryPanel from '../components/HistoryPanel'
+import ModelSelector, { AVAILABLE_MODELS } from '../components/ModelSelector'
 import { AnimatePresence } from 'motion/react'
 
 type ChatMessage = {
@@ -31,48 +32,82 @@ const Chat = () => {
     const [activeModal, setActiveModal] = useState<Activity | null>(null)
     const [currentChatId, setCurrentChatId] = useState<string | null>(null)
     const [historyRefreshKey, setHistoryRefreshKey] = useState(0)
+    const [isLoadedFromHistory, setIsLoadedFromHistory] = useState(false)
+    const [selectedModel, setSelectedModel] = useState(AVAILABLE_MODELS[0].id)
+    const [isStreaming, setIsStreaming] = useState(false)
+    const [selectedImage, setSelectedImage] = useState<File | null>(null)
 
     const sendMessage = useCallback(async () => {
         const content = input.trim()
-        if (!content || loading) return
+        if ((!content && !selectedImage) || loading || isStreaming) return
 
         setError(null)
         setLoading(true)
+        setIsStreaming(true)
 
         const userMsg: ChatMessage = {
             id: crypto.randomUUID(),
             role: 'user',
-            content,
+            content: selectedImage ? `[Image] ${content || 'What is in this image?'}` : content,
         }
 
-        // Optimistically add the user message
+        // Add user message
         setMessages((prev) => [...prev, userMsg])
         setInput('')
+        setIsLoadedFromHistory(false)  // New messages should animate
+
+        // Add placeholder AI message that will be streamed into
+        const aiMsgId = crypto.randomUUID()
+        const aiMsg: ChatMessage = {
+            id: aiMsgId,
+            role: 'model',
+            content: '',
+        }
+        setMessages((prev) => [...prev, aiMsg])
 
         try {
-            // Transform history to match backend expectation and call service
             const history = [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }))
-            const data = await ChatAPI.sendChatMessage(content, history, currentChatId || undefined)
-            const aiMsg: ChatMessage = {
-                id: crypto.randomUUID(),
-                role: 'model',
-                content: data.message ?? '...',
-            }
-            setMessages((prev) => [...prev, aiMsg])
             
-            // Update chatId if returned (for new chats)
-            if (data.chatId && !currentChatId) {
-                setCurrentChatId(data.chatId)
-                // Refresh history panel to show new chat
-                setHistoryRefreshKey(prev => prev + 1)
-            }
+            await sendChatMessageStream(
+                content || 'What is in this image?',
+                history,
+                currentChatId || undefined,
+                selectedModel,
+                selectedImage || undefined,
+                // On chunk received
+                (chunk) => {
+                    setMessages((prev) => 
+                        prev.map(msg => 
+                            msg.id === aiMsgId 
+                                ? { ...msg, content: msg.content + chunk }
+                                : msg
+                        )
+                    )
+                },
+                // On complete
+                (chatId) => {
+                    if (chatId && !currentChatId) {
+                        setCurrentChatId(chatId)
+                        setHistoryRefreshKey(prev => prev + 1)
+                    }
+                    setLoading(false)
+                    setIsStreaming(false)
+                    setSelectedImage(null) // Clear image after sending
+                },
+                // On error
+                (error) => {
+                    setError(error.message || 'Something went wrong, please try again.')
+                    setLoading(false)
+                    setIsStreaming(false)
+                }
+            )
         } catch (e: any) {
-        console.error(e)
-        setError(e?.message || 'Something went wrong, please try again.')
-        } finally {
-        setLoading(false)
+            console.error(e)
+            setError(e?.message || 'Something went wrong, please try again.')
+            setLoading(false)
+            setIsStreaming(false)
         }
-    }, [input, loading, messages, currentChatId])
+    }, [input, loading, isStreaming, messages, currentChatId, selectedModel, selectedImage])
 
     const handleGenerateFlashCards = useCallback(async () => {
         if (messages.length === 0) {
@@ -83,7 +118,7 @@ const Chat = () => {
         try {
             setError(null)
             const history = messages.map((m) => ({ role: m.role, content: m.content }))
-            const result = await ChatAPI.generateFlashCards(history, currentChatId || undefined)
+            const result = await ChatAPI.generateFlashCards(history, currentChatId || undefined, selectedModel)
             
             const newActivity: Activity = {
                 id: result.activityId || crypto.randomUUID(),
@@ -110,7 +145,7 @@ const Chat = () => {
         try {
             setError(null)
             const history = messages.map((m) => ({ role: m.role, content: m.content }))
-            const result = await ChatAPI.generateQuiz(history, currentChatId || undefined)
+            const result = await ChatAPI.generateQuiz(history, currentChatId || undefined, selectedModel)
             
             const newActivity: Activity = {
                 id: result.activityId || crypto.randomUUID(),
@@ -148,6 +183,16 @@ const Chat = () => {
         setActivities([])
         setError(null)
         setCurrentChatId(null)
+        setIsLoadedFromHistory(false)
+        setSelectedImage(null)
+    }, [])
+
+    const handleImageSelect = useCallback((image: File) => {
+        setSelectedImage(image)
+    }, [])
+
+    const handleImageRemove = useCallback(() => {
+        setSelectedImage(null)
     }, [])
 
     const handleChatSelect = useCallback(async (chatId: string) => {
@@ -165,6 +210,7 @@ const Chat = () => {
             
             setMessages(loadedMessages)
             setCurrentChatId(chatId)
+            setIsLoadedFromHistory(true)
             
             // Load activities for this chat
             try {
@@ -212,6 +258,10 @@ const Chat = () => {
                     {/* Buttons above chatbox */}
                     <div className="flex justify-between gap-2 shrink-0">
                         <div className="flex gap-2">
+                            <ModelSelector 
+                                selectedModel={selectedModel}
+                                onModelChange={setSelectedModel}
+                            />
                             <button 
                                 onClick={handleGenerateFlashCards}
                                 disabled={messages.length === 0}
@@ -236,13 +286,16 @@ const Chat = () => {
                     <div className="flex-1 flex gap-4 min-h-0">
                         {/* Chat Section */}
                         <div className="flex-1 flex flex-col gap-2 min-h-0">
-                            <ChatBox messages={messages} />
+                            <ChatBox messages={messages} skipAnimations={isLoadedFromHistory} />
                             <ChatInput 
                                 input={input}
                                 loading={loading}
                                 error={error}
                                 onInputChange={setInput}
                                 onSendMessage={sendMessage}
+                                onImageSelect={handleImageSelect}
+                                selectedImage={selectedImage}
+                                onImageRemove={handleImageRemove}
                             />
                         </div>
 

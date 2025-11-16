@@ -9,9 +9,10 @@ type ChatMessage = {
 
 type ChatBoxProps = {
   messages: ChatMessage[]
+  skipAnimations?: boolean  // Skip typewriter for loaded messages
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({ messages }) => {
+const ChatBox: React.FC<ChatBoxProps> = ({ messages, skipAnimations = false }) => {
   const endRef = useRef<HTMLDivElement | null>(null)
   const scrollIntervalRef = useRef<number | null>(null)
 
@@ -50,7 +51,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ messages }) => {
         )}
 
         {messages.map((m) => (
-            <ChatMessage key={m.id} role={m.role} content={m.content} />
+            <ChatMessage key={m.id} role={m.role} content={m.content} skipAnimation={skipAnimations} />
         ))}
         <div ref={endRef} />
     </div>

@@ -173,6 +173,10 @@ body {
     @apply backdrop-blur-lg bg-white/2 border border-white/10 shadow-md;
   }
 
+  .glass-close {
+    @apply backdrop-blur-lg bg-white/2 border border-white/10 shadow-md hover:bg-red-400/50;
+  }
+
   .glass-strong {
     @apply backdrop-blur-lg bg-white/15 border border-white/30 shadow-xl;
   }
