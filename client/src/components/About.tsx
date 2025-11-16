@@ -99,7 +99,6 @@ const About = () => {
                     <div className='aspect-square rounded-md bg-surface border border-border flex items-center justify-center overflow-hidden'>
                         <div className='text-center'>
                             <Sparkles className='w-10 h-10 text-primary mx-auto mb-4' />
-                            <p className='text-text-muted font-light'>Image Placeholder</p>
                         </div>
                     </div>
                 </motion.div>
