@@ -46,6 +46,13 @@ const textToSpeech = async (req, res) => {
 
     } catch (error) {
         console.error('[textToSpeech] Error:', error);
+        console.error('[textToSpeech] Error stack:', error.stack);
+        console.error('[textToSpeech] Error details:', {
+            message: error.message,
+            name: error.name,
+            statusCode: error.statusCode,
+            body: error.body
+        });
         res.status(500).json({ 
             error: 'Failed to generate speech',
             details: error?.message || 'Unknown error'
