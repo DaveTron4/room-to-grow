@@ -6,6 +6,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Apply monospace font globally */
+body {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
 /* Custom light variant: applies when element is descendant of .light */
 @custom-variant light (&:is(.light *));
 
@@ -173,6 +178,31 @@ html {
   }
 }
 
+/* Custom Scrollbar Styling - Applied to all scrollbars */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af transparent;
+}
+
+/* Specific override for chatbox if needed */
 .chatbox-scroll::-webkit-scrollbar {
   width: 8px;
 }
