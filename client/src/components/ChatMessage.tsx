@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion } from 'motion/react'
 import ReactMarkdown from 'react-markdown'
+import { Volume2, VolumeX, Loader2 } from 'lucide-react'
 
 type ChatMessageProps = {
   role: 'user' | 'model'
@@ -10,6 +11,9 @@ type ChatMessageProps = {
 const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
   const [displayedContent, setDisplayedContent] = useState('')
   const [isTyping, setIsTyping] = useState(role === 'model')
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false)
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   // Typewriter effect for AI messages
   useEffect(() => {
@@ -34,6 +38,55 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
     }
   }, [content, role])
 
+  const handlePlayAudio = async () => {
+    if (isPlayingAudio) {
+      // Stop audio
+      audioRef.current?.pause()
+      audioRef.current = null
+      setIsPlayingAudio(false)
+      return
+    }
+
+    try {
+      setIsLoadingAudio(true)
+      
+      const response = await fetch('http://localhost:5000/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ text: content })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate audio')
+      }
+
+      const audioBlob = await response.blob()
+      const audioUrl = URL.createObjectURL(audioBlob)
+      
+      const audio = new Audio(audioUrl)
+      audioRef.current = audio
+      
+      audio.onended = () => {
+        setIsPlayingAudio(false)
+        URL.revokeObjectURL(audioUrl)
+      }
+
+      audio.onerror = () => {
+        setIsPlayingAudio(false)
+        setIsLoadingAudio(false)
+        URL.revokeObjectURL(audioUrl)
+      }
+
+      await audio.play()
+      setIsPlayingAudio(true)
+      setIsLoadingAudio(false)
+    } catch (error) {
+      console.error('Failed to play audio:', error)
+      setIsLoadingAudio(false)
+    }
+  }
+
   return (
     <motion.div 
       className={`flex mt-2 ${role === 'user' ? 'justify-end text-right' : 'justify-start text-left'}`}
@@ -50,7 +103,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
         className={
           role === 'user'
             ? 'max-w-[85%] rounded-sm px-2 py-1 bg-user-msg text-text'
-            : 'max-w-[85%] rounded-sm px-2 py-1 bg-ai-msg border border-ai-msg-border text-text'
+            : 'max-w-[85%] rounded-sm px-2 py-1 bg-ai-msg border border-ai-msg-border text-text relative group'
         }
       >
         <div className={`prose prose-sm max-w-none ${role === 'user' ? 'text-right' : 'text-left'}`}>
@@ -79,7 +132,24 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
             {displayedContent}
           </ReactMarkdown>
         </div>
-        {/* {isTyping && <div className="inline-block w-0.5 h-2 ml-1 bg-accent-1 animate-pulse"></div>} */}
+        
+        {/* Audio control button for AI messages */}
+        {role === 'model' && !isTyping && (
+          <button
+            onClick={handlePlayAudio}
+            disabled={isLoadingAudio}
+            className="absolute top-1 right-1 p-0.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface rounded-full"
+            title={isPlayingAudio ? 'Stop audio' : 'Play audio'}
+          >
+            {isLoadingAudio ? (
+              <Loader2 className="w-1 h-1 text-text-muted animate-spin" />
+            ) : isPlayingAudio ? (
+              <VolumeX className="w-1 h-1 text-primary" />
+            ) : (
+              <Volume2 className="w-1 h-1 text-text-muted hover:text-primary" />
+            )}
+          </button>
+        )}
       </div>
     </motion.div>
   )

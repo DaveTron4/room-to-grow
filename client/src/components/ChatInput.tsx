@@ -1,5 +1,5 @@
-import React from 'react'
-import {Send} from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react'
+import { Send, Mic, MicOff } from 'lucide-react'
 
 type ChatInputProps = {
   input: string
@@ -16,6 +16,70 @@ const ChatInput: React.FC<ChatInputProps> = ({
   onInputChange, 
   onSendMessage 
 }) => {
+  const [isListening, setIsListening] = useState(false)
+  const [speechSupported, setSpeechSupported] = useState(false)
+  const recognitionRef = useRef<any>(null)
+
+  useEffect(() => {
+    // Check if speech recognition is supported
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (SpeechRecognition) {
+      setSpeechSupported(true)
+      
+      const recognition = new SpeechRecognition()
+      recognition.continuous = true
+      recognition.interimResults = true
+      recognition.lang = 'en-US'
+
+      recognition.onresult = (event: any) => {
+        let interimTranscript = ''
+        let finalTranscript = ''
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript + ' '
+          } else {
+            interimTranscript += transcript
+          }
+        }
+
+        if (finalTranscript) {
+          onInputChange(input + finalTranscript)
+        }
+      }
+
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error)
+        setIsListening(false)
+      }
+
+      recognition.onend = () => {
+        setIsListening(false)
+      }
+
+      recognitionRef.current = recognition
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop()
+      }
+    }
+  }, [input, onInputChange])
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return
+
+    if (isListening) {
+      recognitionRef.current.stop()
+      setIsListening(false)
+    } else {
+      recognitionRef.current.start()
+      setIsListening(true)
+    }
+  }
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -39,6 +103,26 @@ const ChatInput: React.FC<ChatInputProps> = ({
                 onKeyDown={onKeyDown}
                 rows={1}
             />
+            
+            {speechSupported && (
+              <button
+                onClick={toggleListening}
+                disabled={loading}
+                className={`shrink-0 px-1 rounded-sm transition-colors flex items-center justify-center ${
+                  isListening 
+                    ? 'bg-error hover:bg-error/80 text-white' 
+                    : 'bg-surface-hover hover:bg-surface-hover/80 text-text'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                title={isListening ? 'Stop recording' : 'Start voice input'}
+              >
+                {isListening ? (
+                  <MicOff className="h-1 w-1 animate-pulse" />
+                ) : (
+                  <Mic className="h-1 w-1" />
+                )}
+              </button>
+            )}
+
             <button
                 onClick={onSendMessage}
                 disabled={loading || input.trim().length === 0}
@@ -55,7 +139,10 @@ const ChatInput: React.FC<ChatInputProps> = ({
                 )}
             </button>
         </div>
-        <div className="mt-1 text-xs text-text-subtle">Press Enter to send, Shift+Enter for a new line</div>
+        <div className="mt-1 text-xs text-text-subtle">
+          Press Enter to send, Shift+Enter for a new line
+          {speechSupported && <span> • Click mic to use voice input</span>}
+        </div>
     </div>
   )
 }

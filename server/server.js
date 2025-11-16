@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import "./config/dotenv.js";
 import chatRoutes from './routes/chatRoutes.js';
+import ttsRoutes from './routes/ttsRoutes.js';
 
 import passport from "passport";
 import session from "express-session";
@@ -64,6 +65,7 @@ app.use(
 // Routes
 app.use('/auth', authRouter);
 app.use('/api/chat', chatRoutes);
+app.use('/api/tts', ttsRoutes);
 
 // Root route
 app.get('/', (req, res) => {
