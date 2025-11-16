@@ -45,8 +45,8 @@ router.get(
 router.get(
   "/github/callback",
   passport.authenticate("github", {
-    successRedirect: "http://localhost:5173/chat",
-    failureRedirect: "http://localhost:5173/login",
+    successRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/chat`,
+    failureRedirect: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/login`,
   })
 );
 

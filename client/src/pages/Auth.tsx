@@ -3,7 +3,8 @@ import { motion } from 'motion/react'
 
 const Auth = () => {
   const handleGithubLogin = () => {
-    window.location.href = 'http://localhost:5000/auth/github'
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+    window.location.href = `${apiUrl}/auth/github`
   }
 
   return (
