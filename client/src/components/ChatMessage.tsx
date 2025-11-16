@@ -23,6 +23,9 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
   const handlePlayAudio = async () => {
     if (isPlayingAudio) {
       // Stop audio
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel()
+      }
       audioRef.current?.pause()
       audioRef.current = null
       setIsPlayingAudio(false)
@@ -32,6 +35,30 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
     try {
       setIsLoadingAudio(true)
       
+      // Use browser's built-in speech synthesis as fallback
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(content)
+        utterance.rate = 0.9
+        utterance.pitch = 1
+        utterance.volume = 1
+        
+        utterance.onend = () => {
+          setIsPlayingAudio(false)
+          setIsLoadingAudio(false)
+        }
+        
+        utterance.onerror = () => {
+          setIsPlayingAudio(false)
+          setIsLoadingAudio(false)
+        }
+        
+        window.speechSynthesis.speak(utterance)
+        setIsPlayingAudio(true)
+        setIsLoadingAudio(false)
+        return
+      }
+      
+      // Fallback to ElevenLabs (will fail with current account status)
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
       const response = await fetch(`${apiUrl}/api/tts`, {
         method: 'POST',

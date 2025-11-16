@@ -32,17 +32,19 @@ const textToSpeech = async (req, res) => {
             }
         );
 
-        // Set headers for audio streaming
-        res.setHeader('Content-Type', 'audio/mpeg');
-        res.setHeader('Transfer-Encoding', 'chunked');
-
-        // Stream the audio chunks to the response
+        // Collect all audio chunks into a buffer
+        const chunks = [];
         for await (const chunk of audio) {
-            res.write(chunk);
+            chunks.push(chunk);
         }
+        const audioBuffer = Buffer.concat(chunks);
 
-        res.end();
-        console.log('[textToSpeech] Audio generation complete');
+        // Set headers and send complete audio
+        res.setHeader('Content-Type', 'audio/mpeg');
+        res.setHeader('Content-Length', audioBuffer.length);
+        res.send(audioBuffer);
+
+        console.log('[textToSpeech] Audio generation complete, sent', audioBuffer.length, 'bytes');
 
     } catch (error) {
         console.error('[textToSpeech] Error:', error);
