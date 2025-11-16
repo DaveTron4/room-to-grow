@@ -16,7 +16,8 @@ const Nav = () => {
 
     useEffect(() => {
         // Check if user is logged in
-        fetch('http://localhost:5000/auth/login/success', {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+        fetch(`${apiUrl}/auth/login/success`, {
             credentials: 'include'
         })
             .then(res => res.json())
@@ -30,7 +31,8 @@ const Nav = () => {
 
     const handleLogout = async () => {
         try {
-            await fetch('http://localhost:5000/auth/logout', {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+            await fetch(`${apiUrl}/auth/logout`, {
                 credentials: 'include'
             })
             setUser(null)
