@@ -8,6 +8,7 @@ import QuizModal from '../components/QuizModal'
 import HistoryPanel from '../components/HistoryPanel'
 import ModelSelector, { AVAILABLE_MODELS } from '../components/ModelSelector'
 import { AnimatePresence } from 'motion/react'
+import { Loader2 } from 'lucide-react'
 
 type ChatMessage = {
   id: string
@@ -36,6 +37,8 @@ const Chat = () => {
     const [selectedModel, setSelectedModel] = useState(AVAILABLE_MODELS[0].id)
     const [isStreaming, setIsStreaming] = useState(false)
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
+    const [isGeneratingFlashcards, setIsGeneratingFlashcards] = useState(false)
+    const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false)
 
     const sendMessage = useCallback(async () => {
         const content = input.trim()
@@ -117,6 +120,7 @@ const Chat = () => {
 
         try {
             setError(null)
+            setIsGeneratingFlashcards(true)
             const history = messages.map((m) => ({ role: m.role, content: m.content }))
             const result = await ChatAPI.generateFlashCards(history, currentChatId || undefined, selectedModel)
             
@@ -133,8 +137,10 @@ const Chat = () => {
         } catch (e: any) {
             console.error(e)
             setError(e?.message || 'Failed to generate flash cards.')
+        } finally {
+            setIsGeneratingFlashcards(false)
         }
-    }, [messages, activities, currentChatId])
+    }, [messages, activities, currentChatId, selectedModel])
 
     const handleGenerateQuiz = useCallback(async () => {
         if (messages.length === 0) {
@@ -144,6 +150,7 @@ const Chat = () => {
 
         try {
             setError(null)
+            setIsGeneratingQuiz(true)
             const history = messages.map((m) => ({ role: m.role, content: m.content }))
             const result = await ChatAPI.generateQuiz(history, currentChatId || undefined, selectedModel)
             
@@ -160,8 +167,10 @@ const Chat = () => {
         } catch (e: any) {
             console.error(e)
             setError(e?.message || 'Failed to generate quiz.')
+        } finally {
+            setIsGeneratingQuiz(false)
         }
-    }, [messages, activities, currentChatId])
+    }, [messages, activities, currentChatId, selectedModel])
 
     const handleActivityClick = (activity: Activity) => {
         setActiveModal(activity)
@@ -264,16 +273,18 @@ const Chat = () => {
                             />
                             <button 
                                 onClick={handleGenerateFlashCards}
-                                disabled={messages.length === 0}
-                                className="glass hover:bg-btn-generative text-btn-generative-text px-2 py-1 rounded-sm text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={messages.length === 0 || isGeneratingFlashcards}
+                                className="glass hover:bg-btn-generative text-btn-generative-text px-2 py-1 rounded-sm text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                             >
+                                {isGeneratingFlashcards && <Loader2 className="w-1 h-1 animate-spin" />}
                                 Generate Flash Cards
                             </button>
                             <button 
                                 onClick={handleGenerateQuiz}
-                                disabled={messages.length === 0}
-                                className="glass hover:bg-btn-generative text-btn-generative-text px-2 py-1 rounded-sm text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={messages.length === 0 || isGeneratingQuiz}
+                                className="glass hover:bg-btn-generative text-btn-generative-text px-2 py-1 rounded-sm text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                             >
+                                {isGeneratingQuiz && <Loader2 className="w-1 h-1 animate-spin" />}
                                 Generate Quiz
                             </button>
                         </div>
