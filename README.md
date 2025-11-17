@@ -229,7 +229,9 @@ See [ROADMAP.md](./ROADMAP.md) for detailed timeline.
 
 ## 🎨 Screenshots
 
-_Coming soon!_
+![Home Page](./img/Screenshot%202025-11-15%20110131.png)
+![Chat Page](./img/Screenshot%202025-11-16%20062721.png)
+![Login Page](./img/Screenshot%202025-11-16%20062742.png)
 
 ---
 
@@ -253,7 +255,7 @@ MIT License - feel free to use this project for learning!
 
 ## 👨‍💻 Author
 
-**David** - Full-Stack AI Learning Platform 2025
+**David Salas C.** - Full-Stack AI Learning Platform 2025
 
 ---
 
@@ -268,15 +270,6 @@ MIT License - feel free to use this project for learning!
 - **Tailwind CSS** for rapid styling
 - **Framer Motion** for smooth animations
 - **Lucide** for beautiful icons
-
----
-
-## 📞 Support
-
-If you encounter issues:
-1. Check [SETUP.md](./SETUP.md) for troubleshooting
-2. Open an issue on GitHub
-3. Visit the live app at [www.roomtogrow.fit](https://www.roomtogrow.fit)
 
 ---
 
